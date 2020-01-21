@@ -2,18 +2,21 @@ import numpy
 
 terminus = 90
 currentAge = 24
-retirementAge = 35
+retirementAge = 30
 startingBalance = 100000
 annualSpend = 24000
 inflation = 1.0225
 simulations = 1000
-returnStdev = 0.24907273550480202
-returnAverage = 0.12393469387755104
+# returnStdev = 0.24907273550480202
+# returnAverage = 0.12393469387755104
+returnStdev = 0.3
+returnAverage = 0.19137
 contribution = 40000
 
 success = 0
 bestCase = 0
 worstCase = 0
+medianCase = []
 
 for i in range(simulations):
     sample = numpy.random.normal(returnAverage, returnStdev, terminus - currentAge)
@@ -41,6 +44,7 @@ for i in range(simulations):
                 worstCase = j + 1
                 break
 
+    medianCase.append(portfolio)
     # print('${:,}'.format(portfolio))
     if portfolio > 0:
         success += 1
@@ -50,3 +54,4 @@ for i in range(simulations):
 print('Success Rate: ', success / simulations * 100, '%', sep = '')
 print('Best Case: ${:,}'.format(bestCase))
 print('Worst Case:', worstCase, 'years')
+print('Median Case: ${:,}'.format(numpy.median(medianCase)))
