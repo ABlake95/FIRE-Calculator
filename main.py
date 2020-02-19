@@ -2,7 +2,7 @@ import numpy
 
 terminus = 90
 currentAge = 25
-retirementAge = 54
+retirementAge = 34
 startingBalance = 137069.23
 annualSpend = 34000
 inflation = 1.032430142824996
@@ -10,8 +10,8 @@ simulations = 10000
 returnStdev = 0.24907273550480202
 # returnAverage = 0.12393469387755104
 # returnStdev = 0.35
-returnAverage = 0.2
-contribution = 20000
+returnAverage = 0.18
+contribution = 30000
 
 success = 0
 bestCase = 0
