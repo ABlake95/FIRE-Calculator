@@ -1,21 +1,23 @@
 import numpy
 
+simulations = 10000
 terminus = 90
 currentAge = 25
-retirementAge = 58
+retirementAge = 75
 startingBalance = 140000
-annualSpend = 40000
 inflation = 1.032430142824996
-simulations = 10000
-# returnStdev = 0.24907273550480202
-# returnAverage = 0.12393469387755104
-returnStdev = 0.35
+annualSpend = 400000
+contribution = 45000
+
 returnAverage = 0.2
-contribution = 48000
+returnStdev = 0.3
+
+# NASDAQ Metrics
+# returnAverage = 0.12393469387755104
+# returnStdev = 0.24907273550480202
 
 success = 0
-bestCase = 0
-worstCase = 0
+worstCase = None
 medianCase = []
 retirementStartBalance = []
 
@@ -37,26 +39,30 @@ for i in range(simulations):
         spend *= inflation
         portfolio -= spend
         if portfolio <= 0:
-            if worstCase == 0 or worstCase > j + 1:
+            if worstCase == None or worstCase > j + 1:
                 worstCase = j + 1
                 break
 
         portfolio *= (1 + sample[j])
         if portfolio <= 0:
-            if worstCase == 0 or worstCase > j + 1:
+            if worstCase == None or worstCase > j + 1:
                 worstCase = j + 1
                 break
 
     medianCase.append(portfolio)
     if portfolio > 0:
         success += 1
-        if bestCase == 0 or bestCase < portfolio:
-            bestCase = portfolio
-
-bestCase /= (inflation ** (terminus - currentAge))
+    else:
+    	if worstCase == None or worstCase > terminus - retirementAge:
+    		worstCase = terminus - retirementAge
 
 print('Success Rate: ', success / simulations * 100, '%', sep = '')
-print('Worst Case:', worstCase, 'years')
+if worstCase:
+	print('Worst Case Return to Work at:', worstCase + retirementAge)
+else:
+	print('No Worst Case after 10,000 simulations')
+
+print()
 print('Inflation-Adjusted Retirement Start Median Case: ${:,}'.format(numpy.median(retirementStartBalance) / (inflation ** (retirementAge - currentAge))))
-print('Inflation-Adjusted Terminus Median Case: ${:,}'.format(numpy.median(medianCase) / (inflation ** (terminus - currentAge))))
-print('Inflation-Adjusted Terminus Best Case: ${:,}'.format(bestCase))
+print('Terminus Median Case (NOT ADJUSTED FOR INFLATION): ${:,}'.format(numpy.median(medianCase)))
+print()
